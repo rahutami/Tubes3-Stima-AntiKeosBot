@@ -1,9 +1,6 @@
 import re
 from datetime import datetime
 
-# accept DD/MM/YY DD/MM/YYYY "DD Month Year"
-# ex: 14/05/20 14/05/2020 14 Mei 2020
-# Februari asumsi gamungkin masukkin 29 Februari tp yearnya ga kabisat 
 def convertMonth(month):
     if(month == "januari"):
         return "01"
@@ -56,6 +53,9 @@ def isLeapYear(year):
     else:
         return False
 
+# accept DD/MM/YY DD/MM/YYYY "DD Month Year"
+# ex: 14/05/20 14/05/2020 14 Mei 2020
+# Februari asumsi gamungkin masukkin 29 Februari tp yearnya ga kabisat 
 def dateContained(line):
     line = line.lower()
     months30 = ["04", "06", "09", "11"]
