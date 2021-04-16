@@ -56,7 +56,7 @@ def isLeapYear(year):
 # accept DD/MM/YY DD/MM/YYYY "DD Month Year"
 # ex: 14/05/20 14/05/2020 14 Mei 2020
 # Februari asumsi gamungkin masukkin 29 Februari tp yearnya ga kabisat 
-def dateContained(line):
+def searchDate(line):
     line = line.lower()
     months30 = ["04", "06", "09", "11"]
     months31 = ["01", "03","05", "07", "08", "10", "12"]
@@ -132,7 +132,7 @@ def dateContained(line):
     return date
 
 # Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
-def kataPentingContained(line):
+def searchKataPenting(line):
     line = line.lower()
     kataPenting = ["kuis", "tubes", "tucil", "ujian", "praktikum"]
     kataPentingInLine = re.search('|'.join(kataPenting), line)
@@ -142,7 +142,7 @@ def kataPentingContained(line):
     
     return kataPentingInLine
 
-string = "Tubes 12 April 2020"
-print(dateContained(string)) #print 12 April 2020
-print(kataPentingContained(string)) #print Tubes
-print(convertDate("12/02/20"))
+# string = "Tubes 12 April 2020"
+# print(searchDate(string)) #print 12 April 2020
+# print(searchKataPenting(string)) #print Tubes
+# print(convertDate("12/02/20"))
