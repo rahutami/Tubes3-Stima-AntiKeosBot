@@ -1,5 +1,46 @@
 import re
-from datetime import datetime
+
+def makeBorderFunction(str1):
+    k = [i for i in range (-1, len(str1) - 1)]
+
+    borderFunction = []
+    for i in range (len(k)):
+        borderFunction.append(0)
+
+        for j in range (k[i]):
+            if str1[0:j+1] == str1[k[i]-j:k[i]+1]:
+                borderFunction[i] = len(str1[0:j+1])
+    
+    return borderFunction
+
+
+def searchKMP (line, *words):
+    line = line.lower()
+
+    for word in words:
+        word = word.lower()
+    
+        borderFunction = makeBorderFunction(word)
+        found = False
+
+        (i,j) = (0,0)
+
+        while(i < len(line) and not found):
+            if(j == len(word) - 1 and word[j] == line[i]):
+                found = True
+
+            if(word[j] != line[i]):
+                j = borderFunction[j-1] - 1
+            
+            j += 1
+            i += 1
+
+        # return index start
+        if(found):
+            return i-len(word)
+        
+    return -1
+
 
 def convertMonth(month):
     if(month == "januari"):
@@ -41,7 +82,6 @@ def isLeapYear(year):
     else:
         year = int(year[-4:0])
 
-    print(year)
     if (year % 4) == 0:
         if (year % 100) == 0:
             if (year % 400) == 0:
@@ -62,46 +102,22 @@ def searchDate(line):
     months31 = ["01", "03","05", "07", "08", "10", "12"]
 
     # Cek format DD/MM/YY
-    date = re.search("([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{2}", line)
+    date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{2})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{2})|([0-2][0-9]/02/[0-9]{2})", line)
     if(date != None):
-        return convertDate(date.group(0))
-
-    date = re.search("([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{2}", line)
-    if(date != None):
-        return convertDate(date.group(0))
-
-    date = re.search("[0-2][0-9]/02/[0-9]{2}", line)
-    if(date != None):
-        return convertDate(date.group(0))
+        return (date.start(), convertDate(date.group(0)))
     
     # Cek format DD/MM/YYYY
-    date = re.search("([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{4}", line)
+    date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{4})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{4})|([0-2][0-9]/02/[0-9]{4})", line)
     if(date != None):
-        return convertDate(date.group(0))    
-    
-    date = re.search("([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{4}", line)
-    if(date != None):
-        return convertDate(date.group(0))
-
-    date = re.search("[0-2][0-9]/02/[0-9]{4}", line)
-    if(date != None):
-        return convertDate(date.group(0))
+        return (date.start(), convertDate(date.group(0)))    
 
     months30 = ["april", "juni", "september", "november"]
     months31 = ["januari", "maret","mei", "juli", "agustus", "oktober", "desember"]
     
     # Cek format DD Month YYY
-    date = re.search("([0-2][0-9]|30) (" + '|'.join(months30) + ") [0-9]{4}", line)
+    date = re.search("(([0-2][0-9]|30) (" + '|'.join(months30) + ") [0-9]{4})|(([0-2][0-9]|3[01]) (" + '|'.join(months31) + ") [0-9]{4})|([0-2][0-9] Februari [0-9]{4})", line)
     if(date != None):
-        return convertDate(date.group(0))
-
-    date = re.search("([0-2][0-9]|3[01]) (" + '|'.join(months31) + ") [0-9]{4}", line)
-    if(date != None):
-        return convertDate(date.group(0))
-
-    date = re.search("([0-2][0-9]) Februari [0-9]{4}", line)
-    if(date != None):
-        return convertDate(date.group(0))
+        return (date.start(), convertDate(date.group(0)))
     
     # # Cek Februari
     # year = re.search("[0-9]{4}", line).group(0)
@@ -129,20 +145,87 @@ def searchDate(line):
     #             return date.group(0)
     #         date = re.search("[0-2][0-8]/02/[0-9]{4}", line)            
 
-    return date
+    return (-1, -1)
 
 # Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
 def searchKataPenting(line):
-    line = line.lower()
     kataPenting = ["kuis", "tubes", "tucil", "ujian", "praktikum"]
     kataPentingInLine = re.search('|'.join(kataPenting), line)
 
     if(kataPentingInLine != None):
-        return kataPentingInLine.group(0)
+        return (kataPentingInLine.start(), kataPentingInLine.group(0))
     
-    return kataPentingInLine
+    return (-1, -1)
 
-# string = "Tubes 12 April 2020"
-# print(searchDate(string)) #print 12 April 2020
-# print(searchKataPenting(string)) #print Tubes
-# print(convertDate("12/02/20"))
+# Cari "matkul" or "mata kuliah"
+def searchKeywordMatkul(line):
+    keyword = re.search(" matkul ", line)
+
+    if(keyword == None):
+        keyword = re.search(" mata kuliah ", line)
+
+    if(keyword == None):
+        return (-1,-1)
+    else:
+        return (keyword.start(), keyword.end())
+
+# Cari "topik" or "materi"
+def searchKeywordTopik(line):
+    keyword = re.search(" topik ", line)
+
+    if(keyword == None):
+        keyword = re.search(" materi ", line)
+
+    if(keyword == None):
+        return (-1,-1)
+    else:
+        return (keyword.start(), keyword.end())
+
+def extractTaskFromLine(line, id):
+    loweredline = line.lower()
+
+    listIndex = []
+
+    (kataPentingStart, kataPenting) = searchKataPenting(loweredline)
+    listIndex.append(["katapenting", kataPentingStart])
+
+    (dateStart, date) = searchDate(loweredline)
+    listIndex.append(["tanggal", dateStart])
+
+    (matkulStart, matkulEnd) = searchKeywordMatkul(loweredline)
+    listIndex.append(["matkul", matkulStart])
+
+    (topikStart, topikEnd) = searchKeywordTopik(loweredline)
+    listIndex.append(["topik", topikStart])
+
+    listIndex.sort(key=lambda x: x[1])
+    
+    for pair in listIndex:
+        if(pair[1] == -1):
+            return -1
+            
+    for i in range (len(listIndex)):
+        if(listIndex[i][0] == "matkul"):
+            if(i == len(listIndex) - 1):
+                namaMatkul = (line[matkulEnd:]).strip()
+            else:
+                namaMatkul = (line[matkulEnd: listIndex[i+1][1]]).strip()
+
+        elif(listIndex[i][0] == "topik"):
+            if(i == len(listIndex) - 1):
+                namaTopik = (line[topikEnd:]).strip()
+            else:
+                namaTopik = (line[topikEnd: listIndex[i+1][1]]).strip()
+    
+    obj = {
+        "id" : id,
+        "kataPenting" : kataPenting.capitalize(),
+        "deadline" : date,
+        "matkul" : namaMatkul,
+        "topik" : namaTopik,
+    }
+
+    return obj
+
+# string = "Halo bot tolong catat Tubes matkul IF2210 materi anu 23 April 2020"
+# print(extractFromLine(string, 1))

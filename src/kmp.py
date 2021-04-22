@@ -12,11 +12,14 @@ def makeBorderFunction(str1):
     return borderFunction
 
 
-def kmp (str1, str2):
+def searchKMP (str1, str2):
     if(len(str1) > len(str2)):
         str3 = str1
         str1 = str2
         str2 = str3
+
+    str1 = str1.lower()
+    str2 = str2.lower()
     
     borderFunction = makeBorderFunction(str1)
     print(borderFunction)
@@ -34,6 +37,7 @@ def kmp (str1, str2):
         j += 1
         i += 1
     
+    # return index start
     if(not found):
          return -1
 
