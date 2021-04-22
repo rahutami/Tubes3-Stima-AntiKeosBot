@@ -1,4 +1,5 @@
 import re
+from util import *
 
 def makeBorderFunction(str1):
     k = [i for i in range (-1, len(str1) - 1)]
@@ -12,7 +13,6 @@ def makeBorderFunction(str1):
                 borderFunction[i] = len(str1[0:j+1])
     
     return borderFunction
-
 
 def searchKMP (line, *words):
     line = line.lower()
@@ -40,58 +40,6 @@ def searchKMP (line, *words):
             return i-len(word)
         
     return -1
-
-
-def convertMonth(month):
-    if(month == "januari"):
-        return "01"
-    elif(month == "februari"):
-        return "02"
-    elif(month == "maret"):
-        return "03"
-    elif(month == "april"):
-        return "04"
-    elif(month == "mei"):
-        return "05"
-    elif(month == "juni"):
-        return "06"
-    elif(month == "juli"):
-        return "07"
-    elif(month == "agustus"):
-        return "08"
-    elif(month == "september"):
-        return "09"
-    elif(month == "oktober"):
-        return "10"
-    elif(month == "november"):
-        return "11"
-    elif(month == "desember"):
-        return "12"
-
-def convertDate(date):
-    months = ["april", "juni", "september", "november", "januari", "maret","mei", "juli", "agustus", "oktober", "desember", "februari"]
-
-    if(re.search("([0-2][0-9]|3[01])/[01][0-9]/[0-9]{2}", date) != None):
-        return date[0:6] + "20" + date[6:8]
-    elif(re.search("[0-9][0-9] (" + '|'.join(months) + ") [0-9]{4}", date) != None):
-        return date[0:2] + "/" + convertMonth(date[3:-5]) + "/" + date[-4:]
-
-def isLeapYear(year):
-    if(len(year) == 2):
-        year = int("20" + year)
-    else:
-        year = int(year[-4:0])
-
-    if (year % 4) == 0:
-        if (year % 100) == 0:
-            if (year % 400) == 0:
-                return True
-            else:
-                return False
-        else:
-            return True
-    else:
-        return False
 
 # accept DD/MM/YY DD/MM/YYYY "DD Month Year"
 # ex: 14/05/20 14/05/2020 14 Mei 2020
@@ -170,18 +118,17 @@ def searchKeywordMatkul(line):
         return (keyword.start(), keyword.end())
 
 # Cari "topik" or "materi"
-def searchKeywordTopik(line):
-    keyword = re.search(" topik ", line)
+def searchKeywords(line, *keywords):
 
-    if(keyword == None):
-        keyword = re.search(" materi ", line)
+    for keyword in keywords:
+        index = re.search(keyword, line)
+        if(index != None):
+            return (index.start(), index.end())
 
-    if(keyword == None):
-        return (-1,-1)
-    else:
-        return (keyword.start(), keyword.end())
+    return (-1,-1)
 
 def extractTaskFromLine(line, id):
+    line = removeUnnecessaryWords(line, "tanggal", "Tanggal", "deadline", "Deadline")
     loweredline = line.lower()
 
     listIndex = []
@@ -192,10 +139,10 @@ def extractTaskFromLine(line, id):
     (dateStart, date) = searchDate(loweredline)
     listIndex.append(["tanggal", dateStart])
 
-    (matkulStart, matkulEnd) = searchKeywordMatkul(loweredline)
+    (matkulStart, matkulEnd) = searchKeywords(loweredline, " matkul ", " mata kuliah ")
     listIndex.append(["matkul", matkulStart])
 
-    (topikStart, topikEnd) = searchKeywordTopik(loweredline)
+    (topikStart, topikEnd) = searchKeywords(line, " topik ", " materi ")
     listIndex.append(["topik", topikStart])
 
     listIndex.sort(key=lambda x: x[1])
@@ -227,5 +174,4 @@ def extractTaskFromLine(line, id):
 
     return obj
 
-# string = "Halo bot tolong catat Tubes matkul IF2210 materi anu 23 April 2020"
-# print(extractFromLine(string, 1))
+removeUnnecessaryWords("tanggal 1")

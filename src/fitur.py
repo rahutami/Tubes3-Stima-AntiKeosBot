@@ -1,17 +1,31 @@
 from checker import *
+from util import *
+
+def convertObjectToMessage(task):
+    return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
 
 def tambahTask(line, id, taskList):
     newTask = extractTaskFromLine(line, id)
     taskList.append(newTask)
-    message = "[TASK BERHASIL DICATAT]\n(ID:" + str(newTask["id"]) + ") " + str(newTask["deadline"]) + " - " + newTask["matkul"] + " - " + newTask["kataPenting"] + " - " + newTask["topik"]
+    message = "[TASK BERHASIL DICATAT]\n" + convertObjectToMessage(newTask)
     return(message, id+1, taskList)
+
+def daftarTask(line, taskList):
+    message = ""
+    for task in taskList:
+        message += convertObjectToMessage(task) + "\n"
+    return message
+
+def checkDeadline(line, taskList):
+    line = removeWords(line, "kapan", "Kapan", "ya", "?", "Ya")
+    
+    (indexStart, indexEnd) = searchKeywords(line.lower(), "tugas")
 
 # Ngereturn tupple of (message, availID, taskList)
 def checkFitur(line, availID, taskList):
-    print(searchKMP(line.lower(), "semua"))
-    if(searchKMP(line.lower(), "semua") != -1):
-        print("fitur tampilkan daftar task")
-    elif(searchKMP(line.lower(), "apa saja") != -1):
-        print("fitur tampilkan task dengan deadline dari x smp y")
+    if(searchKMP(line.lower(), "apa saja", "tampil") != -1):
+        return (daftarTask(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "kapan") != -1):
+        return (checkDeadline(line, taskList), availID, taskList)
     else:
         return tambahTask(line, availID, taskList)
