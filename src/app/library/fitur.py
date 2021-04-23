@@ -1,5 +1,5 @@
-from checker import *
-from util import *
+from app.library.checker import *
+from app.library.util import *
 
 def convertObjectToMessage(task):
     return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]

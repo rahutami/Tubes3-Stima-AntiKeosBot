@@ -66,7 +66,7 @@ def convertDateToDays(date):
 def compareDates(date1, date2):
     if(convertDateToDays(date1) < convertDateToDays(date2)):
         return -1
-    if(convertDateToDays(date1) = convertDateToDays(date2)):
+    if(convertDateToDays(date1) == convertDateToDays(date2)):
         return 0
     if(convertDateToDays(date1) < convertDateToDays(date2)):
         return 1

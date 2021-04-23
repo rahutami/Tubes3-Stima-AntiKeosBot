@@ -1,5 +1,5 @@
 import re
-from util import *
+from app.library.util import *
 
 def makeBorderFunction(str1):
     k = [i for i in range (-1, len(str1) - 1)]
@@ -146,11 +146,11 @@ def extractTaskFromLine(line, id):
     listIndex.append(["topik", topikStart])
 
     listIndex.sort(key=lambda x: x[1])
-    
+
     for pair in listIndex:
         if(pair[1] == -1):
             return -1
-            
+
     for i in range (len(listIndex)):
         if(listIndex[i][0] == "matkul"):
             if(i == len(listIndex) - 1):
@@ -174,4 +174,4 @@ def extractTaskFromLine(line, id):
 
     return obj
 
-removeUnnecessaryWords("tanggal 1")
+# removeUnnecessaryWords("tanggal 1")
