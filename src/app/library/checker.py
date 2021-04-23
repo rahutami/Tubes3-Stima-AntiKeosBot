@@ -128,7 +128,7 @@ def searchKeywords(line, *keywords):
     return (-1,-1)
 
 def extractTaskFromLine(line, id):
-    line = removeUnnecessaryWords(line, "tanggal", "Tanggal", "deadline", "Deadline")
+    line = removeWords(line, "tanggal", "Tanggal", "deadline", "Deadline")
     loweredline = line.lower()
 
     listIndex = []

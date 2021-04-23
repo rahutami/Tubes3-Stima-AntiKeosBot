@@ -2,7 +2,10 @@ from app.library.checker import *
 from app.library.util import *
 
 def convertObjectToMessage(task):
-    return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
+    if(task != -1):
+        return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
+    
+    return "Perintah tidak dapat dikenali"
 
 def tambahTask(line, id, taskList):
     newTask = extractTaskFromLine(line, id)

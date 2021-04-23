@@ -22,5 +22,17 @@ function sendToFlask(e){
         headers: new Headers({
             "content-type": "application/json"
         })
-    })
+    }).then(response => response.json())
+    .then(data => console.log(processResponse(data[0])))
+    .catch(error => console.error(error));
+}
+
+function processResponse(pack){
+    let availID = pack["availID"];
+    let message = pack["message"];
+    let taskList = pack["taskList"];
+
+    localStorage.setItem('availID', availID);
+    localStorage.setItem('taskList', taskList);
+    return message
 }

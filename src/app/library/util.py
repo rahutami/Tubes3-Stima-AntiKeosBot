@@ -1,3 +1,4 @@
+import re
 def removeWords(line, *words):
     for word in words:
         line = line.replace(word, "")
