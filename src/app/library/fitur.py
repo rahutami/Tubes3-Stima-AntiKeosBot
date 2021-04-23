@@ -1,19 +1,24 @@
 from app.library.checker import *
 from app.library.util import *
 
-# # TODO: fix processing error still add new object to taskList and increment availID
+# # DONE: fixed processing error still add new object to taskList and increment availID
+# # TODO: fitur2 masih pada belom kelar bro
 
 def convertObjectToMessage(task):
     if(task != -1):
-        return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
+        return "[TASK BERHASIL DICATAT]\n(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
 
     return "Perintah tidak dapat dikenali"
 
 def tambahTask(line, id, taskList):
     newTask = extractTaskFromLine(line, id)
-    taskList.append(newTask)
-    message = "[TASK BERHASIL DICATAT]\n" + convertObjectToMessage(newTask)
-    return(message, id+1, taskList)
+    message = convertObjectToMessage(newTask)
+    
+    if newTask != -1:
+        taskList.append(newTask)
+        return(message, id+1, taskList)
+    else:
+        return(message, id, taskList)
 
 def daftarTask(line, taskList):
     message = ""
