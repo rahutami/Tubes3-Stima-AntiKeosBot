@@ -32,7 +32,7 @@ function processResponse(pack){
     let message = pack["message"];
     let taskList = pack["taskList"];
 
-    localStorage.setItem('availID', availID);
-    localStorage.setItem('taskList', taskList);
+    localStorage.setItem('availID', JSON.stringify(availID));
+    localStorage.setItem('taskList', JSON.stringify(taskList));
     return message
 }

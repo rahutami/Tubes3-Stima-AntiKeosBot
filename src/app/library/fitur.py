@@ -1,10 +1,12 @@
 from app.library.checker import *
 from app.library.util import *
 
+# # TODO: fix processing error still add new object to taskList and increment availID
+
 def convertObjectToMessage(task):
     if(task != -1):
         return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
-    
+
     return "Perintah tidak dapat dikenali"
 
 def tambahTask(line, id, taskList):
