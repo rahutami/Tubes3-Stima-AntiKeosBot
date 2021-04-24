@@ -5,8 +5,15 @@ function sendToFlask(e){
     btn.addEventListener('click', sendToFlask);
 
     let line = txt.value;
-    let availID = parseInt(localStorage.getItem('availID'));
+
+    let availID = localStorage.getItem('availID');
+    if (availID == null) availID = 1;
+    else availID = parseInt(availID);
+
     let taskList = JSON.parse(localStorage.getItem('taskList'));
+    if (taskList == null) taskList = [];
+
+    console.log(availID, taskList);
 
     let pack = {
         "line" : line,

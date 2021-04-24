@@ -1,5 +1,5 @@
 import re
-from app.library.util import *
+from util import *
 
 def makeBorderFunction(str1):
     k = [i for i in range (-1, len(str1) - 1)]
@@ -128,18 +128,15 @@ def extractTaskFromLine(line, id):
     (dateStart, date) = searchDate(loweredline)
     listIndex.append(["tanggal", dateStart])
 
-    (matkulStart, matkulEnd) = searchKeywords(loweredline, "matkul", "mata kuliah")
+    (matkulStart, matkulEnd) = searchKeywords(loweredline, " matkul ", " mata kuliah ")
     listIndex.append(["matkul", matkulStart])
 
-    (topikStart, topikEnd) = searchKeywords(line, "topik", "materi")
+    (topikStart, topikEnd) = searchKeywords(line, " topik ", " materi ")
     listIndex.append(["topik", topikStart])
 
     listIndex.sort(key=lambda x: x[1])
 
-    print(listIndex)
-    
     for pair in listIndex:
-        print(pair)
         if(pair[1] == -1):
             return -1
 

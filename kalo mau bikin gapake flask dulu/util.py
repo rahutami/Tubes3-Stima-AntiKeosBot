@@ -5,12 +5,6 @@ def removeWords(line, *words):
     
     return line
 
-def converTaskToMessage(task):
-    if(task != -1):
-        return "[TASK BERHASIL DICATAT]\n(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
-
-    return "Perintah tidak dapat dikenali"
-
 def convertMonth(month):
     if(month == "januari"):
         return "01"

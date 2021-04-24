@@ -1,6 +1,5 @@
 from checker import *
 from fitur import *
-from kmp import *
 
 availableID = 1
 taskList = []
