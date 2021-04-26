@@ -7,7 +7,12 @@ from app.library.util import *
 
 def tambahTask(line, id, taskList):
     newTask = extractTaskFromLine(line, id)
-    message = converTaskToMessage(newTask)
+    message = convertTaskToMessage(newTask)
+    
+    if(message == ""):
+        message = "Perintah tidak dapat dikenali"
+    else:
+        message = "[TASK BERHASIL DICATAT]\n" + message
     
     if newTask != -1:
         taskList.append(newTask)
@@ -16,19 +21,32 @@ def tambahTask(line, id, taskList):
         return(message, id, taskList)
 
 def daftarTask(line, taskList):
+    (startDate, endDate) = extractDateStartDateEnd(line)
+    kataPenting = searchKataPenting(line)
+
+    if(kataPenting != None):
+        kataPenting = kataPenting.group(0)
+    else:
+        kataPenting = ""
+
     message = ""
     for task in taskList:
-        message += converTaskToMessage(task) + "\n"
-    return message
+        if(isQualified(task, kataPenting, startDate, endDate)):
+            message += convertTaskToMessage(task) + "\n"
+
+    if(message == ""):
+        return "Tidak ada"
+    else:
+        return "[Daftar Deadline]\n" + message
 
 def checkDeadline(line, taskList):
     line = removeWords(line, "kapan", "Kapan", "ya", "?", "Ya")
-    
+
     (indexStart, indexEnd) = searchKeywords(line.lower(), "tugas")
 
 # Ngereturn tupple of (message, availID, taskList)
 def checkFitur(line, availID, taskList):
-    if(searchKMP(line.lower(), "apa saja", "tampil") != -1):
+    if(searchKMP(line.lower(), "apa saja", "tampil", "apa aja") != -1):
         return (daftarTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "kapan") != -1):
         return (checkDeadline(line, taskList), availID, taskList)

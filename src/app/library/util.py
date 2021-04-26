@@ -5,11 +5,12 @@ def removeWords(line, *words):
     
     return line
 
-def converTaskToMessage(task):
+# # * Convert task objek jadi :"(ID) Deadline-matkul-kata penting-topik"
+def convertTaskToMessage(task):
     if(task != -1):
-        return "[TASK BERHASIL DICATAT]\n(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
+        return "(ID:" + str(task["id"]) + ") " + str(task["deadline"]) + " - " + task["matkul"] + " - " + task["kataPenting"] + " - " + task["topik"]
 
-    return "Perintah tidak dapat dikenali"
+    return ""
 
 def convertMonth(month):
     if(month == "januari"):
@@ -70,7 +71,9 @@ def convertDateToDays(date):
 
     return day + month*30 + year*365
 
-def compareDates(date1, date2):
+# check if date1 sebelum date2
+# ex; isBefore("14/05/2020", "14/06/2020") = True
+def isBefore(date1, date2):
     arr1 = date1.split("/")
     day1 = int(arr1[0])
     month1 = int(arr1[1])
@@ -82,11 +85,28 @@ def compareDates(date1, date2):
     year2 = int(arr2[2])
 
     # date 1 < date 2
-    if (day1 < day2 and month1 <= month2 and year1 <= year2):
-        return -1
-    if (day1 == day2 and month1 == month2 and year1 == year2):
-        return 0
+    if ((month1 < month2 and year1 <= year2) or (day1 <= day2 and month1 == month2 and year1 == year2)):
+        return True
     else:
-        return 1
+        return False
 
-compareDates("13/04/2020", "14/04/2020")
+def isQualified(task, katapenting, startDate, endDate):
+    print("A")
+    print(task)
+    print(not (isBefore(startDate, task["deadline"]) and isBefore(task["deadline"], endDate)))
+    print(isBefore(startDate, task["deadline"]))
+    print(isBefore(task["deadline"], endDate))
+    if(not (isBefore(startDate, task["deadline"]) and isBefore(task["deadline"], endDate))):
+        return False
+    
+    print("A")
+    if(katapenting == ""):
+        return True
+
+    print("A")
+    if(not(katapenting.lower() == task["kataPenting"].lower())):
+        return False
+
+    print("A")
+    return True
+# compareDates("13/04/2020", "14/04/2020")

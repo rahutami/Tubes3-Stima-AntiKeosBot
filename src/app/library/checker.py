@@ -1,5 +1,7 @@
 import re
 from app.library.util import *
+# from util import *
+from datetime import datetime, timedelta
 
 def makeBorderFunction(str1):
     k = [i for i in range (-1, len(str1) - 1)]
@@ -44,6 +46,8 @@ def searchKMP (line, *words):
 # accept DD/MM/YY DD/MM/YYYY "DD Month Year"
 # ex: 14/05/20 14/05/2020 14 Mei 2020
 # Februari asumsi gamungkin masukkin 29 Februari tp yearnya ga kabisat 
+# return regex object --> buat ambil tanggalnya convertDate(obj.group(0))
+
 def searchDate(line):
     line = line.lower()
     months30 = ["04", "06", "09", "11"]
@@ -52,20 +56,19 @@ def searchDate(line):
     # Cek format DD/MM/YY
     date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{2})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{2})|([0-2][0-9]/02/[0-9]{2})", line)
     if(date != None):
-        return (date.start(), convertDate(date.group(0)))
+        return date
     
     # Cek format DD/MM/YYYY
     date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{4})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{4})|([0-2][0-9]/02/[0-9]{4})", line)
     if(date != None):
-        return (date.start(), convertDate(date.group(0)))    
+        return date    
 
     months30 = ["april", "juni", "september", "november"]
     months31 = ["januari", "maret","mei", "juli", "agustus", "oktober", "desember"]
     
     # Cek format DD Month YYY
     date = re.search("(([0-2][0-9]|30) (" + '|'.join(months30) + ") [0-9]{4})|(([0-2][0-9]|3[01]) (" + '|'.join(months31) + ") [0-9]{4})|([0-2][0-9] Februari [0-9]{4})", line)
-    if(date != None):
-        return (date.start(), convertDate(date.group(0)))
+    return date
     
     # # Cek Februari
     # year = re.search("[0-9]{4}", line).group(0)
@@ -93,26 +96,21 @@ def searchDate(line):
     #             return date.group(0)
     #         date = re.search("[0-2][0-8]/02/[0-9]{4}", line)            
 
-    return (-1, -1)
-
 # Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
 def searchKataPenting(line):
     kataPenting = ["kuis", "tubes", "tucil", "ujian", "praktikum"]
     kataPentingInLine = re.search('|'.join(kataPenting), line)
 
-    if(kataPentingInLine != None):
-        return (kataPentingInLine.start(), kataPentingInLine.group(0))
-    
-    return (-1, -1)
+    return kataPentingInLine
 
 
 # Cari "topik" or "materi"
 def searchKeywords(line, *keywords):
 
     for keyword in keywords:
-        index = re.search(keyword, line)
+        index = searchKMP(line, keyword)
         if(index != None):
-            return (index.start(), index.end())
+            return (index, index+len(keyword))
 
     return (-1,-1)
 
@@ -122,11 +120,23 @@ def extractTaskFromLine(line, id):
 
     listIndex = []
 
-    (kataPentingStart, kataPenting) = searchKataPenting(loweredline)
-    listIndex.append(["katapenting", kataPentingStart])
+    kataPentingObj = searchKataPenting(loweredline)
 
-    (dateStart, date) = searchDate(loweredline)
-    listIndex.append(["tanggal", dateStart])
+    if(kataPentingObj != None):
+        kataPentingStart = kataPentingObj.start()
+        kataPenting = kataPentingObj.group(0)
+        listIndex.append(["katapenting", kataPentingStart])
+    else:
+        listIndex.append(["katapenting", -1])
+
+    dateObj = searchDate(loweredline)
+
+    if(dateObj != None):
+        dateStart = dateObj.start()
+        date = convertDate(date.group(0))
+        listIndex.append(["tanggal", dateStart])
+    else:
+        listIndex.append(["tanggal", -1])
 
     (matkulStart, matkulEnd) = searchKeywords(loweredline, "matkul", "mata kuliah")
     listIndex.append(["matkul", matkulStart])
@@ -135,11 +145,8 @@ def extractTaskFromLine(line, id):
     listIndex.append(["topik", topikStart])
 
     listIndex.sort(key=lambda x: x[1])
-
-    print(listIndex)
     
     for pair in listIndex:
-        print(pair)
         if(pair[1] == -1):
             return -1
 
@@ -166,4 +173,51 @@ def extractTaskFromLine(line, id):
 
     return obj
 
-# removeUnnecessaryWords("tanggal 1")
+def extractDateStartDateEnd(line):
+    if(searchKeywords(line.lower(), "sampai", "dan") != (-1, -1)):
+        tanggal1 = searchDate(line)
+
+    if(tanggal1 != None):
+        tanggal2 = searchDate(line[tanggal1.end():])
+        tanggal1 = convertDate(tanggal1.group(0))
+
+        if(tanggal2 != None):
+            tanggal2 = convertDate(tanggal2.group(0))
+            return (tanggal1, tanggal2)
+
+    if(searchKeywords(line.lower(), "minggu") != (-1,-1)):
+        jmlMinggu = re.search("[0-9]+ minggu", line.lower())
+        if(jmlMinggu != None):
+            jmlMinggu = int(jmlMinggu.group(0).split(" ")[0])
+            startDate = datetime.now()
+            endDate = datetime.now() + timedelta(jmlMinggu*7)
+            return(startDate.strftime("%d/%m/%Y"), endDate.strftime("%d/%m/%Y"))
+
+    if(searchKeywords(line.lower(), "hari") != (-1,-1)):
+        jmlHari = re.search("[0-9]+ hari", line.lower())
+        if(jmlHari != None):
+            jmlHari = int(jmlHari.group(0).split(" ")[0])
+            startDate = datetime.now()
+            endDate = datetime.now() + timedelta(jmlHari)
+            return(startDate.strftime("%d/%m/%Y"), endDate.strftime("%d/%m/%Y"))
+
+    return (datetime.now().strftime("%d/%m/%Y"), "31/12/9999")
+
+# def extractJenisTugas(line):
+#     (keywordStart, keywordEnd) = searchKeywords(line.lower(), "kuis", "tubes", "tucil", "ujian", "praktikum")
+
+#     if(keywordStart != -1):
+#         return line[keywordStart:keywordEnd + 1]
+
+#     return "all"
+obj = {
+    "id" : 1,
+    "kataPenting" : "Tucil",
+    "deadline" : "14/05/2020",
+    "matkul" : "Strategi Algoritma",
+    "topik" : "Anu",
+}
+
+# print(isQualified(obj, "tubes", "13/05/2020", "15/05/2020"))
+# print(extractDateStartDateEnd("7 minggu ke depan"))
+# print(extractDateStartDateEnd("7 hari ke depan"))
