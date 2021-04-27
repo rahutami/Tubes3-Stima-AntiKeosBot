@@ -94,7 +94,7 @@ def isQualified(task, katapenting, startDate, endDate):
     if(not (isBefore(startDate, task["deadline"]) and isBefore(task["deadline"], endDate))):
         return False
     
-    if(katapenting == ""):
+    if(katapenting == "" and (task["kataPenting"] == "Tubes" or task["kataPenting"] == "Tucil")):
         return True
 
     if(not(katapenting.lower() == task["kataPenting"].lower())):
