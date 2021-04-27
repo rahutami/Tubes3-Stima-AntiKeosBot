@@ -13,7 +13,7 @@ function sendToFlask(e){
     let taskList = JSON.parse(localStorage.getItem('taskList'));
     if (taskList == null) taskList = [];
 
-    console.log(availID, taskList);
+    // console.log(availID, taskList);
 
     let pack = {
         "line" : line,
