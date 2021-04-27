@@ -67,7 +67,6 @@ def filterBasedOnMatkul(line, taskList):
 
     for task in taskList:
         if(searchKMP(line.lower(), task["matkul"].lower()) != -1 and (task["kataPenting"] == "Tubes" or task["kataPenting"] == "Tucil")):
-            print(task["matkul"])
             newTaskList.append(task)
 
     if(newTaskList != []):
