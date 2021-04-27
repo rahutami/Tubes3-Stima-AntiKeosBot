@@ -39,10 +39,56 @@ def daftarTask(line, taskList):
     else:
         return "[Daftar Deadline]\n" + message
 
-def checkDeadline(line, taskList):
-    line = removeWords(line, "kapan", "Kapan", "ya", "?", "Ya")
-
+def filterBasedOnKataPenting(line, taskList):
     (indexStart, indexEnd) = searchKeywords(line.lower(), "tugas")
+
+    if(indexStart != -1):
+        kataPenting = ["tubes", "tucil"]
+    else:
+        kataPentingObj = searchKataPenting(line.lower())
+        if kataPentingObj != None:
+            kataPenting = [kataPentingObj.group(0)]
+        else:
+            return taskList
+    
+    newTaskList = []
+
+    for task in taskList:
+        for kata in kataPenting:
+            if(task["kataPenting"].lower() == kata):
+                newTaskList.append(task)
+
+    return newTaskList
+
+def filterBasedOnMatkul(line, taskList):
+    newTaskList = []
+
+    for task in taskList:
+        if(searchKMP(line.lower(), task["matkul"].lower()) and (task["kataPenting"] == "Tubes" or task["kataPenting"] == "Tucil")):
+            newTaskList.append(task)
+
+    return newTaskList
+
+def filterBasedOnTopik(line, taskList):
+    newTaskList = []
+
+    for task in taskList:
+        if(searchKMP(line.lower(), task["topik"].lower()) and (task["kataPenting"] == "Tubes" or task["kataPenting"] == "Tucil")):
+            newTaskList.append(task)
+
+    if(newTaskList != []):
+        return newTaskList
+    else:
+        return taskList
+        
+def checkDeadline(line, taskList):
+    line = removeWords(line, "kapan", "Kapan", "ya", "?", "Ya", "sih")
+
+    taskList = filterBasedOnKataPenting(line, taskList)
+    taskList = filterBasedOnMatkul(line, taskList)
+
+
+
 
 # Ngereturn tupple of (message, availID, taskList)
 def checkFitur(line, availID, taskList):
