@@ -117,9 +117,9 @@ def checkFitur(line, availID, taskList):
         return(hapusTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "semua task") != -1):
         return(allTask(line, taskList), availID, taskList)
-    elif(searchKMP(line.lower(), "kata penting") != -1):
+    elif(searchKMP(line.lower(), "berdasarkan") != -1):
         return(kataPentingTask(line, taskList), availID, taskList)
-    elif(searchKMP(line.lower(), "help") != -1):
+    elif(searchKMP(line.lower(), "bantuan") != -1):
         return(showHelp(), availID, taskList)
     else:
         return tambahTask(line, availID, taskList)
@@ -217,7 +217,16 @@ def showHelp():
     "Memperbaharui task", 
     "Melihat daftar task sesuai dengan kata penting"
     "Help"]
-
+    command = ["Menambahkan task baru : [Kata Penting] matkul [Kode/Nama Matkul] topik [Topik] [Tanggal deadline]",
+    "Melihat daftar task : Lihat semua task",
+    "Melihat semua daftar deadline : Apa saja/apa aja/tampilkan deadline yang ada?",
+    "Melihat daftar deadline berdasarkan range waktu: Apa saja/apa aja/tampilkan deadline [Tanggal awal] sampai [Tanggal akhir]?",
+    "Melihat daftar deadline beberapa hari, minggu, atau bulan kedepan : Apa saja/apa aja/tampilkan deadline [range] hari/minggu/bulan kedepan?",
+    "Melihat deadline dari task tertentu : Kapan deadline [Kata Penting] [Matkul]",
+    "Melihat task berdasarkan kata penting : Lihat berdasarkan [Kata Penting]",
+    "Memperbaharui task : Ubah task [ID] menjadi tanggal [Tanggal]",
+    "Menandai task selesai : Task [ID] sudah selesai",
+    "Help : Aku butuh bantuan"]
     message1 = ""
     for i in range(len(kata_penting)):
         # print(kata)
@@ -226,5 +235,8 @@ def showHelp():
     message2 = ""
     for i in range(len(fitur)):
         message2 += "   " + str(i+1) + ". " + fitur[i] + "\n"
-
-    return "[Fitur]\n" + message2 + "[Kata Penting]\n" + message1
+    
+    message3 = ""
+    for i in range(len(command)):
+        message3 += "   " + str(i+1) + ". " + command[i] + "\n"
+    return "[Fitur]\n" + message2 + "[Kata Penting]\n" + message1 + "[Command]\n" + message3
