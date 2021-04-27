@@ -11,7 +11,7 @@ def index():
       line = request.form["line"]
       print(line)
 
-   return render_template("test.html")
+   return render_template("index.html")
 
 @app.route('/receive-data', methods=['GET', 'POST'])
 def receiveData():

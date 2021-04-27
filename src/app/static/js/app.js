@@ -5,6 +5,15 @@ $(document).ready(() => {
 })
 
 let btn = document.getElementById('sendButton');
+document.getElementById('inputText').addEventListener('keydown', event => {
+    if (event.keyCode === 13 && document.getElementById('inputText').value != "") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById("sendButton").click();
+    }
+})
+
 btn.addEventListener('click', sendToFlask);
 // let btn = document.getElementById("sendButton");
 // btn.addEventListener('click', printText);
@@ -68,11 +77,11 @@ function printText(e,isFromUs){
     //let txt = document.getElementById("inputText");
     if (isFromUs){
         let message = `<div class="my-chat">${e}</div>`
-        let chats = document.getElementById("chatbox");
+        let chats = document.getElementById("chats");
         chats.innerHTML += message;
     } else {
         let message = `<div class="client-chat">${e}</div>`
-        let chats = document.getElementById("chatbox");
+        let chats = document.getElementById("chats");
         chats.innerHTML += message;
     }
     

@@ -13,7 +13,7 @@ def tambahTask(line, id, taskList):
     if(message == ""):
         message = "Perintah tidak dapat dikenali"
     else:
-        message = "[TASK BERHASIL DICATAT]\n" + message
+        message = "[TASK BERHASIL DICATAT]<br>" + message
     
     if newTask != -1:
         taskList.append(newTask)
@@ -33,12 +33,12 @@ def daftarTask(line, taskList):
     message = ""
     for task in taskList:
         if(isQualified(task, kataPenting, startDate, endDate)):
-            message += convertTaskToMessage(task) + "\n"
+            message += convertTaskToMessage(task) + "<br>"
 
     if(message == ""):
         return "Tidak ada"
     else:
-        return "[Daftar Deadline]\n" + message
+        return "[Daftar Deadline]<br>" + message
 
 def filterBasedOnKataPenting(line, taskList):
     (indexStart, indexEnd) = searchKeywords(line.lower(), "tugas")
@@ -99,10 +99,10 @@ def checkDeadline(line, taskList):
     elif(len(taskList) == 1):
         return taskList[0]["deadline"]
     else:
-        message = "Kamu memiliki " + str(len(taskList)) + " " + keyword + " yang memenuhi pencarianmu.\n"
-        message += "Berikut adalah daftar " + keyword + " dan deadlinenya:\n"
+        message = "Kamu memiliki " + str(len(taskList)) + " " + keyword + " yang memenuhi pencarianmu.<br>"
+        message += "Berikut adalah daftar " + keyword + " dan deadlinenya:<br>"
         for task in taskList:
-            message += convertTaskToMessage(task) + "\n"
+            message += convertTaskToMessage(task) + "<br>"
         return message
 
 # Ngereturn tupple of (message, availID, taskList)
@@ -155,58 +155,58 @@ def hapusTask(line, taskList):
 def allTask(line, taskList):
     message = ""
     for task in taskList:
-        message += convertTaskToMessage(task) + "\n"
+        message += convertTaskToMessage(task) + "<br>"
     if (message == ""):
         return "Task kosong"
     else:
-        return "[Daftar Task]\n" + message
+        return "[Daftar Task]<br>" + message
 
 def kataPentingTask(line, taskList):
     if (searchKMP(line.lower(), "praktikum") != -1):
         message = ""
         for task in taskList:
             if (task["kataPenting"] == "Praktikum"):
-                message += convertTaskToMessage(task) + "\n"
+                message += convertTaskToMessage(task) + "<br>"
         if (message == ""):
             return "Tidak ada praktikum"
         else:
-            return "[Daftar Praktikum]\n" + message
+            return "[Daftar Praktikum]<br>" + message
     elif (searchKMP(line.lower(), "tubes") != -1):
         message = ""
         for task in taskList:
             if (task["kataPenting"] == "Tubes"):
-                message += convertTaskToMessage(task) + "\n"
+                message += convertTaskToMessage(task) + "<br>"
         if (message == ""):
             return "Tidak ada tubes"
         else:
-            return "[Daftar Tubes]\n" + message
+            return "[Daftar Tubes]<br>" + message
     elif (searchKMP(line.lower(), "tucil") != -1):
         message = ""
         for task in taskList:
             if (task["kataPenting"] == "Tucil"):
-                message += convertTaskToMessage(task) + "\n"
+                message += convertTaskToMessage(task) + "<br>"
         if (message == ""):
             return "Tidak ada tucil"
         else:
-            return "[Daftar Tucil]\n" + message
+            return "[Daftar Tucil]<br>" + message
     elif (searchKMP(line.lower(), "ujian") != -1):
         message == ""
         for task in taskList:
             if (task["kataPenting"] == "Ujian"):
-                message += convertTaskToMessage(task) + "\n"
+                message += convertTaskToMessage(task) + "<br>"
         if (message == ""):
             return "Tidak ada ujian"
         else:
-            return "[Daftar Ujian]\n" + message
+            return "[Daftar Ujian]<br>" + message
     elif (searchKMP(line.lower(), "kuis") != -1):
         message = ""
         for task in taskList:
             if (task["kataPenting"] == "Kuis"):
-                message += convertTaskToMessage(task) + "\n"
+                message += convertTaskToMessage(task) + "<br>"
         if (message == ""):
             return "Tidak ada kuis"
         else:
-            return "[Daftar Kuis]\n" + message
+            return "[Daftar Kuis]<br>" + message
     else:
         return "Masukkan kata penting salah"
 
@@ -232,13 +232,13 @@ def showHelp():
     message1 = ""
     for i in range(len(kata_penting)):
         # print(kata)
-        message1 += "   " + str(i+1) + ". " + kata_penting[i] + "\n"
+        message1 += "   " + str(i+1) + ". " + kata_penting[i] + "<br>"
 
     message2 = ""
     for i in range(len(fitur)):
-        message2 += "   " + str(i+1) + ". " + fitur[i] + "\n"
+        message2 += "   " + str(i+1) + ". " + fitur[i] + "<br>"
     
     message3 = ""
     for i in range(len(command)):
-        message3 += "   " + str(i+1) + ". " + command[i] + "\n"
-    return "[Fitur]\n" + message2 + "[Kata Penting]\n" + message1 + "[Command]\n" + message3
+        message3 += "   " + str(i+1) + ". " + command[i] + "<br><br>"
+    return "[Fitur]<br>" + message2 + "<br>[Kata Penting]<br>" + message1 + "<br>[Command]<br>" + message3
