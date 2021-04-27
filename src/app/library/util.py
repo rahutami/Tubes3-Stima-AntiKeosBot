@@ -42,7 +42,7 @@ def convertDate(date):
     months = ["april", "juni", "september", "november", "januari", "maret","mei", "juli", "agustus", "oktober", "desember", "februari"]
 
     if(re.search("([0-2][0-9]|3[01])/[01][0-9]/[0-9]{2}", date) != None):
-        return date[0:6] + "20" + date[6:8]
+        return date[0:6] + "20" + date[-2:]
     elif(re.search("[0-9][0-9] (" + '|'.join(months) + ") [0-9]{4}", date) != None):
         return date[0:2] + "/" + convertMonth(date[3:-5]) + "/" + date[-4:]
 

@@ -53,15 +53,15 @@ def searchDate(line):
     months30 = ["04", "06", "09", "11"]
     months31 = ["01", "03","05", "07", "08", "10", "12"]
 
-    # Cek format DD/MM/YY
-    date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{2})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{2})|([0-2][0-9]/02/[0-9]{2})", line)
-    if(date != None):
-        return date
-    
     # Cek format DD/MM/YYYY
     date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{4})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{4})|([0-2][0-9]/02/[0-9]{4})", line)
     if(date != None):
-        return date    
+        return date  
+
+    # Cek format DD/MM/YY
+    date = re.search("(([0-2][0-9]|30)/(" + '|'.join(months30) + ")/[0-9]{2})|(([0-2][0-9]|3[01])/(" + '|'.join(months31) + ")/[0-9]{2})|([0-2][0-9]/02/[0-9]{2})", line)
+    if(date != None):
+        return date  
 
     months30 = ["april", "juni", "september", "november"]
     months31 = ["januari", "maret","mei", "juli", "agustus", "oktober", "desember"]
@@ -118,7 +118,6 @@ def searchKeywords(line, *keywords):
 def extractTaskFromLine(line, id):
     line = removeWords(line, "tanggal", "Tanggal", "deadline", "Deadline")
     loweredline = line.lower()
-
     listIndex = []
 
     kataPentingObj = searchKataPenting(loweredline)
