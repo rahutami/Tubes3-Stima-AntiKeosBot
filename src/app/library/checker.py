@@ -66,8 +66,8 @@ def searchDate(line):
     months30 = ["april", "juni", "september", "november"]
     months31 = ["januari", "maret","mei", "juli", "agustus", "oktober", "desember"]
     
-    # Cek format DD Month YYY
-    date = re.search("(([0-2][0-9]|30) (" + '|'.join(months30) + ") [0-9]{4})|(([0-2][0-9]|3[01]) (" + '|'.join(months31) + ") [0-9]{4})|([0-2][0-9] Februari [0-9]{4})", line)
+    # Cek format DD Month YYYY
+    date = re.search("(([0-2][0-9]|30) (" + '|'.join(months30) + ") [0-9]{4})|(([0-2][0-9]|3[01]) (" + '|'.join(months31) + ") [0-9]{4})|([0-2][0-9] februari [0-9]{4})", line)
     return date
     
     # # Cek Februari
@@ -96,7 +96,7 @@ def searchDate(line):
     #             return date.group(0)
     #         date = re.search("[0-2][0-8]/02/[0-9]{4}", line)            
 
-# Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
+# # *Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
 def searchKataPenting(line):
     kataPenting = ["kuis", "tubes", "tucil", "ujian", "praktikum"]
     
@@ -105,7 +105,7 @@ def searchKataPenting(line):
     return kataPentingInLine
 
 
-# Cari "topik" or "materi"
+# # *Cari keywords
 def searchKeywords(line, *keywords):
 
     for keyword in keywords:
@@ -219,6 +219,5 @@ obj = {
     "topik" : "Anu",
 }
 
-# print(isQualified(obj, "tubes", "13/05/2020", "15/05/2020"))
-# print(extractDateStartDateEnd("7 minggu ke depan"))
-# print(extractDateStartDateEnd("7 hari ke depan"))
+# print(searchDate("14/02/2021 adhajdhajsdhk"))
+# print(searchDate("14 Februari 2021 adhajdhajsdhk"))

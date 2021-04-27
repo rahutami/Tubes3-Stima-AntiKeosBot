@@ -91,22 +91,14 @@ def isBefore(date1, date2):
         return False
 
 def isQualified(task, katapenting, startDate, endDate):
-    print("A")
-    print(task)
-    print(not (isBefore(startDate, task["deadline"]) and isBefore(task["deadline"], endDate)))
-    print(isBefore(startDate, task["deadline"]))
-    print(isBefore(task["deadline"], endDate))
     if(not (isBefore(startDate, task["deadline"]) and isBefore(task["deadline"], endDate))):
         return False
     
-    print("A")
     if(katapenting == ""):
         return True
 
-    print("A")
     if(not(katapenting.lower() == task["kataPenting"].lower())):
         return False
 
-    print("A")
     return True
 # compareDates("13/04/2020", "14/04/2020")
