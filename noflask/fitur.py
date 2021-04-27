@@ -36,3 +36,7 @@ def checkFitur(line, availID, taskList):
         return (checkDeadline(line, taskList), availID, taskList)
     else:
         return tambahTask(line, availID, taskList)
+
+
+
+    

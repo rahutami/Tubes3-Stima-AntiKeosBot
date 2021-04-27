@@ -1,5 +1,6 @@
 from app.library.checker import *
 from app.library.util import *
+import re
 
 # # DONE: fixed processing error still add new object to taskList and increment availID
 # # TODO: fitur2 masih pada belom kelar bro
@@ -50,5 +51,126 @@ def checkFitur(line, availID, taskList):
         return (daftarTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "kapan") != -1):
         return (checkDeadline(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "ubah") != -1):
+        return (ubahTask(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "selesai") != -1):
+        return(hapusTask(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "semua task") != -1):
+        return(allTask(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "kata penting") != -1):
+        return(kataPentingTask(line, taskList), availID, taskList)
+    elif(searchKMP(line.lower(), "help") != -1):
+        return(showHelp())
     else:
         return tambahTask(line, availID, taskList)
+
+def ubahTask(line, taskList):
+    result = re.findall('\d', line)
+    date = searchDate(line)
+    dateFix = convertDate(date.group(0))
+    found = False
+    for task in taskList:
+        if (task["id"] == int(result[0])):
+            task["deadline"] = dateFix
+            found = True
+    if(found):
+        return "Task berhasil diperhabarui"
+    else:
+        return "Task tidak ditemukan"
+
+def hapusTask(line, taskList):
+    result = re.findall('\d', line)
+    found = False
+    for task in taskList:
+        if (task["id"] == int(result[0])):
+            taskList.remove(task)
+            found = True
+    if (found):
+        return "Task berhasil dihapus. Selamat ya!"
+    else:
+        return "Task tidak ditemukan"
+
+def allTask(line, taskList):
+    message = ""
+    for task in taskList:
+        message += convertTaskToMessage(task) + "\n"
+    if (message == ""):
+        return "Task kosong"
+    else:
+        return "[Daftar Task]\n" + message
+
+def kataPentingTask(line, taskList):
+    if (searchKMP(line.lower(), "praktikum") != -1):
+        message = ""
+        for task in taskList:
+            if (task["kataPenting"] == "Praktikum"):
+                message += convertTaskToMessage(task) + "\n"
+        if (message == ""):
+            return "Tidak ada praktikum"
+        else:
+            return "[Daftar Praktikum]\n" + message
+    elif (searchKMP(line.lower(), "tubes") != -1):
+        message = ""
+        for task in taskList:
+            if (task["kataPenting"] == "Tubes"):
+                message += convertTaskToMessage(task) + "\n"
+        if (message == ""):
+            return "Tidak ada tubes"
+        else:
+            return "[Daftar Tubes]\n" + message
+    elif (searchKMP(line.lower(), "tucil") != -1):
+        message = ""
+        for task in taskList:
+            if (task["kataPenting"] == "Tucil"):
+                message += convertTaskToMessage(task) + "\n"
+        if (message == ""):
+            return "Tidak ada tucil"
+        else:
+            return "[Daftar Tucil]\n" + message
+    elif (searchKMP(line.lower(), "ujian") != -1):
+        message == ""
+        for task in taskList:
+            if (task["kataPenting"] == "Ujian"):
+                message += convertTaskToMessage(task) + "\n"
+        if (message == ""):
+            return "Tidak ada ujian"
+        else:
+            return "[Daftar Ujian]\n" + message
+    elif (searchKMP(line.lower(), "kuis") != -1):
+        message = ""
+        for task in taskList:
+            if (task["kataPenting"] == "Kuis"):
+                message += convertTaskToMessage(task) + "\n"
+        if (message == ""):
+            return "Tidak ada kuis"
+        else:
+            return "[Daftar Kuis]\n" + message
+    else:
+        return "Masukkan kata penting salah"
+
+def showHelp():
+    kata_penting = ["Tubes", "Tucil", "Ujian", "Kuis", "Praktikum"]
+    fitur = ["Menambahkan task baru", 
+    "Melihat daftar task",
+    "Melihat daftar deadline", 
+    "Menampilkan dedline dari suatu task tertentu", 
+    "Memperbaharui task", 
+    "Melihat daftar task sesuai dengan kata penting"
+    "Help"]
+
+    message1 = ""
+    for kata in kata_penting:
+        # print(kata)
+        message1 += "   - " + kata + "\n"
+
+    message2 = ""
+    for f in fitur:
+        message2 += "   - " + f + "\n"
+
+    return "[Fitur]\n" + message2 + "[Kata Penting]\n" + message1
+    # print("[Kata Penting]")
+    # for kata in kataPenting:
+    #     print("   - ", kata)
+    # print("[Fitur]")
+    # for f in fitur:
+    #     print("   - ", f)
