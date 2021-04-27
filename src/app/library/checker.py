@@ -1,6 +1,6 @@
 import re
-# from app.library.util import *
-from util import *
+from app.library.util import *
+# from util import *
 from datetime import datetime, timedelta
 
 def makeBorderFunction(str1):
@@ -219,5 +219,5 @@ obj = {
     "topik" : "Anu",
 }
 
-print(searchDate("14/02/2021 adhajdhajsdhk"))
-print(searchDate("14 Februari 2021 adhajdhajsdhk"))
+# print(searchDate("14/02/2021 adhajdhajsdhk"))
+# print(searchDate("14 Februari 2021 adhajdhajsdhk"))
