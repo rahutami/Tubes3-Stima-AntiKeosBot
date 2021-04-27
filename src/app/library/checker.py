@@ -99,6 +99,7 @@ def searchDate(line):
 # Special word: Kuis, Tubes, Tucil, Ujian, Praktikum
 def searchKataPenting(line):
     kataPenting = ["kuis", "tubes", "tucil", "ujian", "praktikum"]
+    
     kataPentingInLine = re.search('|'.join(kataPenting), line)
 
     return kataPentingInLine
@@ -133,7 +134,7 @@ def extractTaskFromLine(line, id):
 
     if(dateObj != None):
         dateStart = dateObj.start()
-        date = convertDate(date.group(0))
+        date = convertDate(dateObj.group(0))
         listIndex.append(["tanggal", dateStart])
     else:
         listIndex.append(["tanggal", -1])
