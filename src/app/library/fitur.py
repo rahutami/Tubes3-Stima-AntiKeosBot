@@ -125,7 +125,8 @@ def checkFitur(line, availID, taskList):
         return tambahTask(line, availID, taskList)
 
 def ubahTask(line, taskList):
-    result = re.findall('\d', line)
+    result = re.findall('\d+', line)
+    print(result)
     date = searchDate(line)
     dateFix = convertDate(date.group(0))
     found = False
@@ -139,7 +140,8 @@ def ubahTask(line, taskList):
         return "Task tidak ditemukan"
 
 def hapusTask(line, taskList):
-    result = re.findall('\d', line)
+    result = re.findall('\d+', line)
+    print(result)
     found = False
     for task in taskList:
         if (task["id"] == int(result[0])):
