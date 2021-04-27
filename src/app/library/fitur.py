@@ -120,7 +120,7 @@ def checkFitur(line, availID, taskList):
     elif(searchKMP(line.lower(), "kata penting") != -1):
         return(kataPentingTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "help") != -1):
-        return(showHelp())
+        return(showHelp(), availID, taskList)
     else:
         return tambahTask(line, availID, taskList)
 
@@ -219,18 +219,12 @@ def showHelp():
     "Help"]
 
     message1 = ""
-    for kata in kata_penting:
+    for i in range(len(kata_penting)):
         # print(kata)
-        message1 += "   - " + kata + "\n"
+        message1 += "   " + str(i+1) + ". " + kata_penting[i] + "\n"
 
     message2 = ""
-    for f in fitur:
-        message2 += "   - " + f + "\n"
+    for i in range(len(fitur)):
+        message2 += "   " + str(i+1) + ". " + fitur[i] + "\n"
 
     return "[Fitur]\n" + message2 + "[Kata Penting]\n" + message1
-    # print("[Kata Penting]")
-    # for kata in kataPenting:
-    #     print("   - ", kata)
-    # print("[Fitur]")
-    # for f in fitur:
-    #     print("   - ", f)
