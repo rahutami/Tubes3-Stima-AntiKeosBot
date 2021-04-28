@@ -36,8 +36,6 @@ def searchKMP (line, *words):
             j += 1
             i += 1
 
-            if(j < len(word) and i < len(line)):
-                print(word[j-1], line[i-1])
         # return index start
         if(found):
             return i-len(word)
@@ -211,13 +209,6 @@ def extractDateStartDateEnd(line):
 
     return (datetime.now().strftime("%d/%m/%Y"), "31/12/9999")
 
-# def extractJenisTugas(line):
-#     (keywordStart, keywordEnd) = searchKeywords(line.lower(), "kuis", "tubes", "tucil", "ujian", "praktikum")
-
-#     if(keywordStart != -1):
-#         return line[keywordStart:keywordEnd + 1]
-
-#     return "all"
 obj = {
     "id" : 1,
     "kataPenting" : "Tucil",
@@ -225,6 +216,3 @@ obj = {
     "matkul" : "Strategi Algoritma",
     "topik" : "Anu",
 }
-
-# print(searchDate("14/02/2021 adhajdhajsdhk"))
-# print(searchDate("14 Februari 2021 adhajdhajsdhk"))

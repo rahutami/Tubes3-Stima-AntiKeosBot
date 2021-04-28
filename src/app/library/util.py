@@ -101,4 +101,3 @@ def isQualified(task, katapenting, startDate, endDate):
         return False
 
     return True
-# compareDates("13/04/2020", "14/04/2020")

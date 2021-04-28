@@ -107,7 +107,7 @@ def checkDeadline(line, taskList):
         return message
 
 def sendMeme():
-    x = random.randint(1,10)
+    x = random.randint(1,11)
     return "<img src=\"/static/assets/meme/{}.jpg\" alt=\"meme\"".format(x)
 
 # Ngereturn tupple of (message, availID, taskList)
@@ -133,7 +133,6 @@ def checkFitur(line, availID, taskList):
 
 def ubahTask(line, taskList):
     result = re.findall('\d+', line)
-    print(result)
     date = searchDate(line)
     dateFix = convertDate(date.group(0))
     found = False
@@ -148,7 +147,6 @@ def ubahTask(line, taskList):
 
 def hapusTask(line, taskList):
     result = re.findall('\d+', line)
-    print(result)
     found = False
     for task in taskList:
         if (task["id"] == int(result[0])):
@@ -238,7 +236,6 @@ def showHelp():
     "Help : Aku butuh bantuan"]
     message1 = ""
     for i in range(len(kata_penting)):
-        # print(kata)
         message1 += "   " + str(i+1) + ". " + kata_penting[i] + "<br>"
 
     message2 = ""
