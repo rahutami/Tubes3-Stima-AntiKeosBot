@@ -30,7 +30,7 @@ Aplikasi dapat dibuka melalui website https://esok-kan-masih-ada.herokuapp.com/.
 * Jalankan `pip install virtualenv`
 * Jalankan `python -m venv env`
 * Jalankan source `env/bin/activate` apabila menggunakan sistem operasi berbasis unix atau MacOs. Apabila menggunakan sistem operasi windows Jalankan `.\env\Scripts\activate`
-* Jalankan pip install `-r requirements.txt`
+* Jalankan `pip install -r requirements.txt`
 * Jalankan `python run.py`
 * Buka link yang tertera di terminal.
 
