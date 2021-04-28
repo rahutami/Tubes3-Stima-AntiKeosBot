@@ -25,10 +25,18 @@ Program ini adalah program yang akan mencatat daftar deadline tugas yang diinput
 * Python/Flask
 
 ## Setup
+Aplikasi dapat dibuka melalui website https://esok-kan-masih-ada.herokuapp.com/. Apabila ingin menjalankan program di local host, berikut langkah-langkahnya:
+* Buka terminal dan buka folder src dari program yang telah diunduh.
+* Jalankan `pip install virtualenv`
+* Jalankan `python -m venv env`
+* Jalankan source `env/bin/activate` apabila menggunakan sistem operasi berbasis unix atau MacOs. Apabila menggunakan sistem operasi windows Jalankan `.\env\Scripts\activate`
+* Jalankan pip install `-r requirements.txt`
+* Jalankan `python run.py`
+* Buka link yang tertera di terminal.
 
 ## Status
 
-Project is: _on going_
+Project is: _DONE!_
 
 ## Author
 
