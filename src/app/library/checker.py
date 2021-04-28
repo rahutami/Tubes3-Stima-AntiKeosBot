@@ -30,19 +30,19 @@ def searchKMP (line, *words):
         while(i < len(line) and not found):
             if(j == len(word) - 1 and word[j] == line[i]):
                 found = True
-
-            if(word[j] != line[i]):
-                j = borderFunction[j-1] - 1
+            elif(word[j] != line[i]):
+                j = borderFunction[j] - 1
             
             j += 1
             i += 1
 
+            if(j < len(word) and i < len(line)):
+                print(word[j-1], line[i-1])
         # return index start
         if(found):
             return i-len(word)
-        
     return -1
-
+# nmfsadfnkemdfnejdmfndmfnskememe
 # accept DD/MM/YY DD/MM/YYYY "DD Month Year"
 # ex: 14/05/20 14/05/2020 14 Mei 2020
 # Februari asumsi gamungkin masukkin 29 Februari tp yearnya ga kabisat 
@@ -184,6 +184,14 @@ def extractDateStartDateEnd(line):
         if(tanggal2 != None):
             tanggal2 = convertDate(tanggal2.group(0))
             return (tanggal1, tanggal2)
+
+    if(searchKeywords(line.lower(), "bulan") != (-1,-1)):
+        jmlBulan = re.search("[0-9]+ bulan", line.lower())
+        if(jmlBulan != None):
+            jmlBulan = int(jmlBulan.group(0).split(" ")[0])
+            startDate = datetime.now()
+            endDate = datetime.now() + timedelta(jmlBulan*30)
+            return(startDate.strftime("%d/%m/%Y"), endDate.strftime("%d/%m/%Y"))
 
     if(searchKeywords(line.lower(), "minggu") != (-1,-1)):
         jmlMinggu = re.search("[0-9]+ minggu", line.lower())

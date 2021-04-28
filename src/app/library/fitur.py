@@ -1,6 +1,7 @@
 from app.library.checker import *
 from app.library.util import *
 import re
+import random
 
 # # DONE: fixed processing error still add new object to taskList and increment availID
 # # TODO: fitur2 masih pada belom kelar bro
@@ -105,9 +106,15 @@ def checkDeadline(line, taskList):
             message += convertTaskToMessage(task) + "<br>"
         return message
 
+def sendMeme():
+    x = random.randint(1,10)
+    return "<img src=\"/static/assets/meme/{}.jpg\" alt=\"meme\"".format(x)
+
 # Ngereturn tupple of (message, availID, taskList)
 def checkFitur(line, availID, taskList):
-    if(searchKMP(line.lower(), "apa saja", "tampil", "apa aja") != -1):
+    if(searchKMP(line.lower(), "meme") != -1):
+        return(sendMeme(), availID, taskList)
+    elif(searchKMP(line.lower(), "apa saja", "tampil", "apa aja") != -1):
         return (daftarTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "kapan") != -1):
         return (checkDeadline(line, taskList), availID, taskList)
@@ -119,7 +126,7 @@ def checkFitur(line, availID, taskList):
         return(allTask(line, taskList), availID, taskList)
     elif(searchKMP(line.lower(), "berdasarkan") != -1):
         return(kataPentingTask(line, taskList), availID, taskList)
-    elif(searchKMP(line.lower(), "bantuan") != -1):
+    elif(searchKMP(line.lower(), "bantuan", "help") != -1):
         return(showHelp(), availID, taskList)
     else:
         return tambahTask(line, availID, taskList)
@@ -135,7 +142,7 @@ def ubahTask(line, taskList):
             task["deadline"] = dateFix
             found = True
     if(found):
-        return "Task berhasil diperhabarui"
+        return "Task berhasil diperbaharui"
     else:
         return "Task tidak ditemukan"
 

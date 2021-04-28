@@ -85,6 +85,10 @@ body {
     margin: 10px 0;
 }
 
+.client-chat img{
+    width: 100%;
+}
+
 .my-chat {
     width: 60%;
     word-wrap: break-word;

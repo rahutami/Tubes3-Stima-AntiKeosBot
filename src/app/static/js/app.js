@@ -6,7 +6,7 @@ $(document).ready(() => {
 
 let btn = document.getElementById('sendButton');
 document.getElementById('inputText').addEventListener('keydown', event => {
-    if (event.keyCode === 13 && document.getElementById('inputText').value != "") {
+    if (event.keyCode === 13) {
         // Cancel the default action, if needed
         event.preventDefault();
         // Trigger the button element with a click
@@ -15,47 +15,42 @@ document.getElementById('inputText').addEventListener('keydown', event => {
 })
 
 btn.addEventListener('click', sendToFlask);
-// let btn = document.getElementById("sendButton");
-// btn.addEventListener('click', printText);
 
 function sendToFlask(e){
     
     let txt = document.getElementById('inputText');
 
-    let line = txt.value;
-    printText(line, true);
-    txt.value = '';
-
-    let availID = localStorage.getItem('availID');
-    if (availID == null) availID = 1;
-    else availID = parseInt(availID);
-
-    let taskList = JSON.parse(localStorage.getItem('taskList'));
-    if (taskList == null) taskList = [];
-
-    // console.log(availID, taskList);
+    if(txt.value != ""){
+        let line = txt.value;
+        printText(line, true);
+        txt.value = '';
     
+        let availID = localStorage.getItem('availID');
+        if (availID == null) availID = 1;
+        else availID = parseInt(availID);
+    
+        let taskList = JSON.parse(localStorage.getItem('taskList'));
+        if (taskList == null) taskList = [];
 
-    let pack = {
-        "line" : line,
-        "availID" : availID,
-        "taskList" : taskList
-    };
-
-    fetch(`${window.origin}/receive-data`,{
-        method : "POST",
-        credentials: "include",
-        body: JSON.stringify(pack),
-        cache: "no-cache",
-        headers: new Headers({
-            "content-type": "application/json"
-        })
-    }).then(response => response.json())
-    .then(data =>
-        //console.log(processResponse(data[0]));
-        processResponse(data[0]))
-        //return data[0];
-    .catch(error => console.error(error));
+        let pack = {
+            "line" : line,
+            "availID" : availID,
+            "taskList" : taskList
+        };
+    
+        fetch(`${window.origin}/receive-data`,{
+            method : "POST",
+            credentials: "include",
+            body: JSON.stringify(pack),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        }).then(response => response.json())
+        .then(data =>
+            processResponse(data[0]))
+        .catch(error => console.error(error));
+    }
 }
 
 function processResponse(pack){
@@ -67,7 +62,6 @@ function processResponse(pack){
     localStorage.setItem('taskList', JSON.stringify(taskList));
     
     printText(message, false);
-    return message
 }
 
 
@@ -84,6 +78,5 @@ function printText(e,isFromUs){
         let chats = document.getElementById("chats");
         chats.innerHTML += message;
     }
-    
-    
+    document.getElementById("chats").scrollTo(0,document.getElementById("chats").scrollHeight);
 }
